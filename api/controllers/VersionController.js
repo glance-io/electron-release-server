@@ -317,7 +317,11 @@ module.exports = {
    */
   windows: function(req, res) {
     var platform = req.param('platform');
-    var version = req.param('version');
+    // Extract version from path instead of using req.param to ignore query parameters
+    var pathParts = req.path.toLowerCase().split('/');
+    // Get version from the path - it's after the platform
+    var platformIndex = pathParts.indexOf(platform.toLowerCase());
+    var version = platformIndex >= 0 ? pathParts[platformIndex + 1] : null;
     var channel = req.param('channel') || 'stable';
     const flavor = req.params.flavor || 'default';
 
